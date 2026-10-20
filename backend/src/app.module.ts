@@ -1,0 +1,74 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import configs from './config';
+import { LoggerModule }    from './common/logger/logger.module';
+import { DatabaseModule }  from './infrastructure/database/database.module';
+import { AuthModule }      from './modules/auth/auth.module';
+import { UserModule }      from './modules/user/user.module';
+import { GenreModule }     from './modules/genre/genre.module';
+import { ArtistModule }    from './modules/artist/artist.module';
+import { AlbumModule }     from './modules/album/album.module';
+import { TagModule }       from './modules/tag/tag.module';
+import { SongModule }      from './modules/song/song.module';
+import { PlaylistModule }  from './modules/playlist/playlist.module';
+import { QueueModule }     from './infrastructure/queue/queue.module';
+import { AppController }   from './app.controller';
+import { AppService }      from './app.service';
+import { StripeModule } from './infrastructure/stripe/stripe.module';
+import { PlanModule } from './modules/plan/plan.module';
+import { SubscriptionModule } from './modules/subscription/subscription.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { HomeModule } from './modules/home/home.module';
+import { RedisModule } from './infrastructure/redis/redis.module';
+import { SearchModule } from './modules/search/search.module';
+import { OrganizationModule } from './modules/organization/organization.module';
+
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal:    true,
+      load:        configs,
+      envFilePath: '.env',
+    }),
+
+    ThrottlerModule.forRootAsync({
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl:   configService.get<number>('app.rateLimitWindow', 15) * 60 * 1000,
+          limit: configService.get<number>('app.rateLimitMax', 100),
+        },
+      ],
+      inject: [ConfigService],
+    }),
+
+    LoggerModule,
+    DatabaseModule,
+    RedisModule,
+    AuthModule,
+    UserModule,
+    GenreModule,
+    ArtistModule,
+    AlbumModule,
+    TagModule,
+    SongModule,
+    QueueModule,
+    PlaylistModule,
+    StripeModule,
+    PlanModule,
+    SubscriptionModule,
+    AdminModule,
+    HomeModule,
+    SearchModule,
+    OrganizationModule,
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
+})
+
+export class AppModule {}

@@ -1,0 +1,67 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* globals.css */
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+@layer base {
+  :root {
+    /* Primary Base (#00EF01) */
+    --primary: 120 100% 47%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Primary Shades */
+    --primary-light: 120 100% 55%;
+    --primary-lighter: 120 100% 65%;
+    --primary-dark: 120 100% 38%;
+    --primary-darker: 120 100% 30%;
+
+    /* Hover & Ring */
+    --primary-hover: 120 100% 42%;
+    --ring: 120 100% 47%;
+  }
+
+  .dark {
+    /* Dark Mode */
+    --primary: 120 100% 55%;
+    --primary-foreground: 0 0% 0%;
+
+    --primary-light: 120 100% 65%;
+    --primary-lighter: 120 100% 75%;
+    --primary-dark: 120 100% 45%;
+    --primary-darker: 120 100% 35%;
+
+    --primary-hover: 120 100% 50%;
+    --ring: 120 100% 55%;
+  }
+}
